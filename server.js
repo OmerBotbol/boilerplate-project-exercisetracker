@@ -29,10 +29,18 @@ app.get("/api/exercise/users", (req, res)=>{
 })
 
 app.post("/api/exercise/add", (req, res)=>{
-  User.findByIdAndUpdate(req.body.userId, {description: req.body.description, duration: req.body.duration, date: req.body.date || new Date()}, {new: true})
-  .then(data=>{
-    res.send(data);
-  }) 
+  User.findById(req.body.userId).then((result =>{
+    const newData = {description: req.body.description, duration: req.body.duration, date: req.body.date || new Date()}
+    result.log.push(newData)
+    const dataToSend = {
+      _id: result._id,
+      username: result.userName,
+      description: req.body.description,
+      duration: req.body.duration,
+      date: req.body.date || new Date()
+    }
+    res.send(dataToSend);
+  }))
 })
 
 const listener = app.listen(process.env.PORT || 3000, () => {

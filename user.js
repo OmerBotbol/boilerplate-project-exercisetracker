@@ -11,7 +11,8 @@ const userSchema = mongoose.Schema({
     userName: {type: String, required: true},
     description: String,
     duration: Number,
-    date: Date
+    date: Date,
+    log: {type: [Map], default: []}
 })
 
 module.exports = mongoose.model("User", userSchema);

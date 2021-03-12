@@ -1,15 +1,26 @@
 const express = require('express')
 const app = express()
 const cors = require('cors')
+const mongoose = require("mongoose")
+const User = require("./user")
 require('dotenv').config()
 
 app.use(cors())
+app.use(express.json())
+app.use(express.urlencoded());
 app.use(express.static('public'))
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
 
-
+app.post("/api/exercise/new-user", (req, res)=>{
+  const user = new User({
+    userName: req.body.username
+  })
+  user.save().then((data)=>{
+    res.send(data);
+  })
+})
 
 
 

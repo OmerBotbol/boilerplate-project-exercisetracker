@@ -32,15 +32,24 @@ app.post("/api/exercise/add", (req, res)=>{
   User.findById(req.body.userId).then((result =>{
     const newData = {description: req.body.description, duration: req.body.duration, date: req.body.date || new Date()}
     result.log.push(newData)
-    const dataToSend = {
-      _id: result._id,
-      username: result.userName,
-      description: req.body.description,
-      duration: req.body.duration,
-      date: req.body.date || new Date()
-    }
-    res.send(dataToSend);
+    result.save().then(()=>{
+      const dataToSend = {
+        _id: result._id,
+        username: result.userName,
+        description: req.body.description,
+        duration: req.body.duration,
+        date: req.body.date || new Date()
+      }
+      res.send(dataToSend);
+    })
+    // User.update({_id: req.body.userId}, {newData}, {new: true})
   }))
+})
+
+app.get("/api/exercise/log", (req, res)=>{
+  User.findById(req.query.userId).then((user)=>{
+    res.send(user);
+  })
 })
 
 const listener = app.listen(process.env.PORT || 3000, () => {

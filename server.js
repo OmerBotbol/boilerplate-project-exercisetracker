@@ -18,7 +18,11 @@ app.post("/api/exercise/new-user", (req, res)=>{
     userName: req.body.username
   })
   user.save().then((data)=>{
-    res.send(data);
+    const dataToSend = {
+      username: data.userName,
+      _id: data.id
+    }
+    res.send(dataToSend);
   })
 })
 

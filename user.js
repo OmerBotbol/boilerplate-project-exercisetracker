@@ -12,5 +12,9 @@ const userSchema = mongoose.Schema({
     count: Number,
     log: {type: Array, default: []}
 })
-
+userSchema.set('clean', {
+    transform: (document, returnedObject) => {
+      delete returnedObject.__v
+    }
+  })
 module.exports = mongoose.model("User", userSchema);

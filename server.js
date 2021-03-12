@@ -22,6 +22,11 @@ app.post("/api/exercise/new-user", (req, res)=>{
   })
 })
 
+app.get("/api/exercise/users", (req, res)=>{
+  User.find().then(data =>{
+    res.send(data);
+  })
+})
 
 
 const listener = app.listen(process.env.PORT || 3000, () => {

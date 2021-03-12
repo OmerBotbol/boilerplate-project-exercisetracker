@@ -30,8 +30,9 @@ app.get("/api/exercise/users", (req, res)=>{
 
 app.post("/api/exercise/add", (req, res)=>{
   User.findById(req.body.userId).then((result =>{
-    const newData = {description: req.body.description, duration: req.body.duration, date: req.body.date || new Date()}
+    const newData = {description: req.body.description, duration: req.body.duration, date: new Date(req.body.date) || new Date()}
     result.log.push(newData)
+    result.count = result.log.length
     result.save().then(()=>{
       const dataToSend = {
         _id: result._id,
@@ -42,13 +43,30 @@ app.post("/api/exercise/add", (req, res)=>{
       }
       res.send(dataToSend);
     })
-    // User.update({_id: req.body.userId}, {newData}, {new: true})
   }))
 })
 
 app.get("/api/exercise/log", (req, res)=>{
+  let fromDate = 0;
+  let toDate = Infinity
+  if(req.query.from){
+    fromDate = new Date(req.query.from).getTime();
+  }
+  if(req.query.to){
+    toDate = new Date(req.query.to).getTime();
+  }
   User.findById(req.query.userId).then((user)=>{
-    res.send(user);
+    const limit = Number(req.query.limit) || user.count;
+    const userToSendLog = user.log.filter((data) => {
+      return data.date.getTime() > fromDate && data.date.getTime() < toDate
+    }).slice(0, limit);
+    const sendData = {
+      _id:user._id,
+      username: user.userName,
+      count: user.count,
+      log: userToSendLog
+    }
+    res.send(sendData);
   })
 })
 

@@ -9,10 +9,8 @@ mongoose.connect(process.env.MONGO_URI,{ useNewUrlParser: true, useUnifiedTopolo
 
 const userSchema = mongoose.Schema({
     userName: {type: String, required: true},
-    description: String,
-    duration: Number,
-    date: Date,
-    log: {type: [Map], default: []}
+    count: Number,
+    log: {type: Array, default: []}
 })
 
 module.exports = mongoose.model("User", userSchema);

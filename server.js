@@ -35,7 +35,14 @@ app.get("/api/exercise/users", (req, res)=>{
 
 app.post("/api/exercise/add", (req, res)=>{
   User.findById(req.body.userId).then((result =>{
-    const newData = {description: req.body.description, duration: Number(req.body.duration), date: new Date(req.body.date) || new Date()}
+    let dateToSend
+    if(req.body.date === ""){
+      dateToSend = new Date();
+    }
+    else{
+      dateToSend = new Date(req.body.date)
+    }
+    const newData = {description: req.body.description, duration: Number(req.body.duration), date: dateToSend}
     console.log(result)
     result.log.push(newData)
     result.count = result.log.length
@@ -43,7 +50,7 @@ app.post("/api/exercise/add", (req, res)=>{
       const dataToSend = {
         _id: result._id,
         username: result.username,
-        date: new Date(req.body.date).toDateString() || new Date().toDateString(),
+        date: dateToSend.toDateString(),
         duration: Number(req.body.duration),
         description: req.body.description
       }

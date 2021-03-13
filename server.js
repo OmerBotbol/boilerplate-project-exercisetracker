@@ -27,7 +27,7 @@ app.post("/api/exercise/new-user", (req, res)=>{
 })
 
 app.get("/api/exercise/users", (req, res)=>{
-  User.find().then(data =>{
+  User.find().select("-log -count").then(data =>{
     res.send(data);
   })
 })

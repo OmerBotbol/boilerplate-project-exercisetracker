@@ -10,7 +10,7 @@ mongoose.connect(process.env.MONGO_URI,{ useNewUrlParser: true, useUnifiedTopolo
 const userSchema = mongoose.Schema({
     username: {type: String, required: true},
     count: Number,
-    log: {type: Array, default: []}
+    log: {type: Array}
 })
 userSchema.set('clean', {
     transform: (document, returnedObject) => {

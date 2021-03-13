@@ -8,7 +8,7 @@ mongoose.connect(process.env.MONGO_URI,{ useNewUrlParser: true, useUnifiedTopolo
 })
 
 const userSchema = mongoose.Schema({
-    userName: {type: String, required: true},
+    username: {type: String, required: true},
     count: Number,
     log: {type: Array, default: []}
 })
@@ -17,4 +17,6 @@ userSchema.set('clean', {
       delete returnedObject.__v
     }
   })
+
+  
 module.exports = mongoose.model("User", userSchema);

@@ -15,11 +15,11 @@ app.get('/', (req, res) => {
 
 app.post("/api/exercise/new-user", (req, res)=>{
   const user = new User({
-    userName: req.body.username
+    username: req.body.username
   })
   user.save().then((data)=>{
     const dataToSend = {
-      username: data.userName,
+      username: data.username,
       _id: data.id
     }
     res.send(dataToSend);
@@ -40,7 +40,7 @@ app.post("/api/exercise/add", (req, res)=>{
     result.save().then(()=>{
       const dataToSend = {
         _id: result._id,
-        username: result.userName,
+        username: result.username,
         description: req.body.description,
         duration: req.body.duration,
         date: req.body.date || new Date()
@@ -66,7 +66,7 @@ app.get("/api/exercise/log", (req, res)=>{
     }).slice(0, limit);
     const sendData = {
       _id:user._id,
-      username: user.userName,
+      username: user.username,
       count: user.count,
       log: userToSendLog
     }

@@ -34,16 +34,16 @@ app.get("/api/exercise/users", (req, res)=>{
 
 app.post("/api/exercise/add", (req, res)=>{
   User.findById(req.body.userId).then((result =>{
-    const newData = {description: req.body.description, duration: req.body.duration, date: new Date(req.body.date) || new Date()}
+    const newData = {description: req.body.description, duration: Number(req.body.duration), date: new Date(req.body.date).toDateString() || new Date().toDateString()}
     result.log.push(newData)
     result.count = result.log.length
     result.save().then(()=>{
       const dataToSend = {
         _id: result._id,
         username: result.username,
-        description: req.body.description,
-        duration: req.body.duration,
-        date: new Date(req.body.date).toDateString() || new Date().toDateString()
+        date: new Date(req.body.date).toDateString() || new Date().toDateString(),
+        duration: Number(req.body.duration),
+        description: req.body.description
       }
       res.send(dataToSend);
     })

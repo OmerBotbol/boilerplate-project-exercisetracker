@@ -15,7 +15,8 @@ app.get('/', (req, res) => {
 
 app.post("/api/exercise/new-user", (req, res)=>{
   const user = new User({
-    username: req.body.username
+    username: req.body.username,
+    count: 0
   })
   user.save().then((data)=>{
     const dataToSend = {
@@ -35,6 +36,7 @@ app.get("/api/exercise/users", (req, res)=>{
 app.post("/api/exercise/add", (req, res)=>{
   User.findById(req.body.userId).then((result =>{
     const newData = {description: req.body.description, duration: Number(req.body.duration), date: new Date(req.body.date) || new Date()}
+    console.log(result)
     result.log.push(newData)
     result.count = result.log.length
     result.save().then(()=>{

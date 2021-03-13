@@ -34,7 +34,7 @@ app.get("/api/exercise/users", (req, res)=>{
 
 app.post("/api/exercise/add", (req, res)=>{
   User.findById(req.body.userId).then((result =>{
-    const newData = {description: req.body.description, duration: Number(req.body.duration), date: new Date(req.body.date).toDateString() || new Date().toDateString()}
+    const newData = {description: req.body.description, duration: Number(req.body.duration), date: new Date(req.body.date) || new Date()}
     result.log.push(newData)
     result.count = result.log.length
     result.save().then(()=>{
@@ -64,6 +64,9 @@ app.get("/api/exercise/log", (req, res)=>{
     const userToSendLog = user.log.filter((data) => {
       return data.date.getTime() > fromDate && data.date.getTime() < toDate
     }).slice(0, limit);
+    userToSendLog.forEach((user)=>{
+      return user.date = user.date.toDateString();
+    })
     const sendData = {
       _id:user._id,
       username: user.username,

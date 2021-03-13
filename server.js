@@ -43,7 +43,7 @@ app.post("/api/exercise/add", (req, res)=>{
         username: result.username,
         description: req.body.description,
         duration: req.body.duration,
-        date: req.body.date || new Date()
+        date: new Date(req.body.date).toDateString() || new Date().toDateString()
       }
       res.send(dataToSend);
     })

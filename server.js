@@ -45,7 +45,6 @@ app.post("/api/exercise/add", (req, res)=>{
     const newData = {description: req.body.description, duration: Number(req.body.duration), date: dateToSend}
     console.log(result)
     result.log.push(newData)
-    result.count = result.log.length
     result.save().then(()=>{
       const dataToSend = {
         _id: result._id,
@@ -69,10 +68,18 @@ app.get("/api/exercise/log", (req, res)=>{
     toDate = new Date(req.query.to).getTime();
   }
   User.findById(req.query.userId).then((user)=>{
-    const limit = Number(req.query.limit) || user.count;
-    const userToSendLog = user.log.filter((data) => {
-      return data.date.getTime() > fromDate && data.date.getTime() < toDate
-    }).slice(0, limit);
+    user.count = user.log.length
+    let userToSendLog
+    if(req.query.from || req.query.to || req.query.limit){
+      const limit = Number(req.query.limit) || user.count;
+      userToSendLog = user.log.filter((data) => {
+        console.log(data.date.getTime())
+        return data.date.getTime() >= fromDate && data.date.getTime() <= toDate
+      }).slice(0, limit);
+    }
+    else{
+      userToSendLog = user.log
+    }
     userToSendLog.forEach((user)=>{
       return user.date = user.date.toDateString();
     })
